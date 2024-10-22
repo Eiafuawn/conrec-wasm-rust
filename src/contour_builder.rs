@@ -150,11 +150,10 @@ impl ContourBuilder {
                         0 => {
                             // tail-tail
                             reverse_list(ma.clone());
-                            // fall through to head-tail case
                         }
                         1 => {
                             // head-tail
-                            let ma_clone = ma.clone();  // Clone the Rc before borrowing
+                            let ma_clone = ma.clone();
                             let mut ma = ma.borrow_mut();
                             let mut mb = mb.borrow_mut();
                             mb.tail.borrow_mut().next = Some(ma.head.clone());
@@ -162,16 +161,15 @@ impl ContourBuilder {
                             mb.tail = ma.tail.clone();
                             drop(ma);
                             drop(mb);
-                            self.remove_seq(ma_clone);  // Use the cloned Rc
+                            self.remove_seq(ma_clone);
                         }
                         3 => {
                             // head-head
                             reverse_list(ma.clone());
-                            // fall through to tail-head case
                         }
                         2 => {
                             // tail-head
-                            let mb_clone = mb.clone();  // Clone the Rc before borrowing
+                            let mb_clone = mb.clone();
                             let mut ma = ma.borrow_mut();
                             let mut mb = mb.borrow_mut();
                             ma.tail.borrow_mut().next = Some(mb.head.clone());
@@ -179,7 +177,7 @@ impl ContourBuilder {
                             ma.tail = mb.tail.clone();
                             drop(ma);
                             drop(mb);
-                            self.remove_seq(mb_clone);  // Use the cloned Rc
+                            self.remove_seq(mb_clone);
                         }
                         _ => unreachable!(),
                     }
