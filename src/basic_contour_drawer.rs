@@ -34,7 +34,7 @@ impl BasicContourDrawer {
         z: f64,
         k: usize,
     ) {
-        if (!self.swap_axes) {
+        if !self.swap_axes {
             self.contour[k].lines.extend(vec![y1, x1, y2, x2]);
         } else {
             self.contour[k].lines.extend(vec![x1, y1, x2, y2]);
