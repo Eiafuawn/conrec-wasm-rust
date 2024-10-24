@@ -1,6 +1,6 @@
 use std::cell::RefCell;
 use std::rc::Rc;
-use crate::contour_builder::{ContourBuilder, Point, Sequence};
+use crate::contour_builder::{ContourBuilder, Point, SequenceNode};
 
 struct ShapeContour {
     level: f64,
@@ -35,9 +35,9 @@ impl ShapeContourDrawer {
         k: usize,
     ) {
         if !self.swap_axes {
-            self.contours[k].add_segment(Point { x: x1, y: y1 }, Point { x: x2, y: y2 });
-        } else {
             self.contours[k].add_segment(Point { x: y1, y: x1 }, Point { x: y2, y: x2 });
+        } else {
+            self.contours[k].add_segment(Point { x: x1, y: y1 }, Point { x: x2, y: y2 });
         }
     }
     
