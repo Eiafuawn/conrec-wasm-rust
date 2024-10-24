@@ -154,7 +154,7 @@ impl ContourBuilder {
                         1 => {
                             // head-tail
                             let ma_clone = ma.clone();
-                            let mut ma = ma.borrow_mut();
+                            let ma = ma.borrow_mut();
                             let mut mb = mb.borrow_mut();
                             mb.tail.borrow_mut().next = Some(ma.head.clone());
                             ma.head.borrow_mut().prev = Some(mb.tail.clone());
@@ -171,7 +171,7 @@ impl ContourBuilder {
                             // tail-head
                             let mb_clone = mb.clone();
                             let mut ma = ma.borrow_mut();
-                            let mut mb = mb.borrow_mut();
+                            let mb = mb.borrow_mut();
                             ma.tail.borrow_mut().next = Some(mb.head.clone());
                             mb.head.borrow_mut().prev = Some(ma.tail.clone());
                             ma.tail = mb.tail.clone();

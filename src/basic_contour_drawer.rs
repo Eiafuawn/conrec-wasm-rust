@@ -31,7 +31,7 @@ impl BasicContourDrawer {
         x2: f64,
         y1: f64,
         y2: f64,
-        z: f64,
+        _z: f64,
         k: usize,
     ) {
         if !self.swap_axes {

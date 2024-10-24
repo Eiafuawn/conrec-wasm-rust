@@ -1,6 +1,4 @@
-use std::cell::RefCell;
-use std::rc::Rc;
-use crate::contour_builder::{ContourBuilder, Point, SequenceNode};
+use crate::contour_builder::{ContourBuilder, Point};
 
 struct ShapeContour {
     level: f64,
