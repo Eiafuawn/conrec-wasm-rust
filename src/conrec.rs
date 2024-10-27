@@ -1,4 +1,5 @@
 use serde::{Serialize, Deserialize};
+use wasm_bindgen::prelude::*;
 
 use crate::basic_contour_drawer::{BasicContourDrawer, BasicContour};
 use crate::shape_contour_drawer::{ShapeContourDrawer, ShapeContour};
@@ -6,9 +7,9 @@ use crate::calculate_contour::{calculate_contour, CalculateContourOptions, Conto
 
 #[derive(Serialize, Deserialize)]
 pub struct ConrecOptions {
-    xs: Option<Vec<f64>>, 
-    ys: Option<Vec<f64>>,    
-    swap_axes: Option<bool>,    
+    pub xs: Option<Vec<f64>>, 
+    pub ys: Option<Vec<f64>>,    
+    pub swap_axes: Option<bool>,    
 }
 
 impl Default for ConrecOptions {
@@ -35,12 +36,13 @@ impl CalcContourDrawer for ContourDrawer {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Serialize, Deserialize)]
 pub enum ContourDrawerName {
     Basic,
     Shape,
 }
 
+#[derive(Serialize, Deserialize)]
 pub enum ContourResult {
     Basic {
         contours: Vec<BasicContour>,
@@ -52,6 +54,7 @@ pub enum ContourResult {
     },
 }
 
+#[derive(Serialize, Deserialize)]
 pub struct DrawContourOptions {
     pub levels: Option<Vec<f64>>,
     pub nb_levels: Option<usize>,
@@ -60,15 +63,15 @@ pub struct DrawContourOptions {
 }
 
 pub struct Conrec {
-    matrix: Vec<Vec<f64>>,
-    rows: usize,
-    cols: usize,
-    xs: Vec<f64>,
-    ys: Vec<f64>,
-    swap_axes: bool,
-    has_min_max: bool,
-    min: f64,
-    max: f64,
+    pub matrix: Vec<Vec<f64>>,
+    pub rows: usize,
+    pub cols: usize,
+    pub xs: Vec<f64>,
+    pub ys: Vec<f64>,
+    pub swap_axes: bool,
+    pub has_min_max: bool,
+    pub min: f64,
+    pub max: f64,
 }
 
 impl Conrec {

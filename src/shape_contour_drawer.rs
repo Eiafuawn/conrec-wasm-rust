@@ -1,5 +1,7 @@
 use crate::contour_builder::{ContourBuilder, Point};
+use serde::{Serialize, Deserialize};
 
+#[derive(Serialize, Deserialize)]
 pub struct ShapeContour {
     pub level: f64,
     k: usize,

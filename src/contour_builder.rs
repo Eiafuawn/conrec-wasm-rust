@@ -1,8 +1,9 @@
 use std::f64::EPSILON;
 use std::rc::Rc;
 use std::cell::RefCell;
+use serde::{Serialize, Deserialize};
 
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Point {
     pub x: f64,
     pub y: f64,
