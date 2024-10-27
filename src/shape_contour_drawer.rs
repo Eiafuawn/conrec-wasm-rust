@@ -1,18 +1,18 @@
 use crate::contour_builder::{ContourBuilder, Point};
 
-struct ShapeContour {
-    level: f64,
+pub struct ShapeContour {
+    pub level: f64,
     k: usize,
     lines: Vec<Point>,
 }
 
-struct ShapeContourDrawer {
+pub struct ShapeContourDrawer {
     contours: Vec<ContourBuilder>,
     swap_axes: bool,
 }
 
 impl ShapeContourDrawer {
-    fn new(levels: Vec<f64>, swap_axes: bool) -> Self {
+    pub fn new(levels: Vec<f64>, swap_axes: bool) -> Self {
         let contours = levels.into_iter()
             .map(|level| ContourBuilder::new(level))
             .collect();
@@ -23,7 +23,7 @@ impl ShapeContourDrawer {
         }
     }
     
-    fn draw_contour(
+    pub fn draw_contour(
         &mut self,
         x1: f64,
         x2: f64,
@@ -39,7 +39,7 @@ impl ShapeContourDrawer {
         }
     }
     
-    fn get_contour(&mut self) -> Vec<ShapeContour> {
+    pub fn get_contour(&mut self) -> Vec<ShapeContour> {
         let mut l: Vec<ShapeContour> = Vec::new();
         let a = self.contours.clone();
     

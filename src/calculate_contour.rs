@@ -7,6 +7,12 @@ pub trait ContourDrawer {
     fn draw_contour(&mut self, x1: f64, y1: f64, x2: f64, y2: f64, z: f64, k: usize);
 }
 
+impl ContourDrawer for crate::basic_contour_drawer::BasicContourDrawer {
+    fn draw_contour(&mut self, x1: f64, y1: f64, x2: f64, y2: f64, z: f64, k: usize) {
+        self.draw_contour(x1, x2, y1, y2, z, k);
+    }
+}
+
 #[derive(Default)]
 pub struct CalculateContourOptions {
     pub timeout: Option<u64>,
@@ -21,7 +27,7 @@ pub fn calculate_contour(
     x: &[f64],
     y: &[f64],
     z: &[f64],
-    contour_drawer: &mut impl ContourDrawer,
+    contour_drawer: &mut dyn ContourDrawer,
     options: Option<CalculateContourOptions>,
 ) -> bool {
     if z.is_empty() {

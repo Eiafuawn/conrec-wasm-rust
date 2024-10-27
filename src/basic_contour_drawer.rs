@@ -1,17 +1,17 @@
 #[derive(Debug, Clone)]
-struct BasicContour {
+pub struct BasicContour {
     z_value: f64,
     lines: Vec<f64>,
 }
 
 #[derive(Clone)]
-struct BasicContourDrawer {
+pub struct BasicContourDrawer {
     contour: Vec<BasicContour>,
     swap_axes: bool,
 }
 
 impl BasicContourDrawer {
-    fn new(levels: Vec<f64>, swap_axes: bool) -> Self {
+    pub fn new(levels: Vec<f64>, swap_axes: bool) -> Self {
         let mut contour = Vec::new();
         for level in levels {
             contour.push(BasicContour {
@@ -41,7 +41,7 @@ impl BasicContourDrawer {
         }
     }
     
-    fn get_contour(&self) -> Vec<BasicContour> {
+    pub fn get_contour(&self) -> Vec<BasicContour> {
         self.contour.clone()
     }
 }
