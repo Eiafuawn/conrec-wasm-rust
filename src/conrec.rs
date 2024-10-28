@@ -1,9 +1,16 @@
 use serde::{Serialize, Deserialize};
-use wasm_bindgen::prelude::*;
 
 use crate::basic_contour_drawer::{BasicContourDrawer, BasicContour};
 use crate::shape_contour_drawer::{ShapeContourDrawer, ShapeContour};
 use crate::calculate_contour::{calculate_contour, CalculateContourOptions, ContourDrawer as CalcContourDrawer};
+
+extern crate web_sys;
+
+macro_rules! log {
+    ( $( $t:tt )* ) => {
+        web_sys::console::log_1(&format!( $( $t )* ).into());
+    }
+}
 
 #[derive(Serialize, Deserialize)]
 pub struct ConrecOptions {
@@ -77,13 +84,39 @@ pub struct Conrec {
 impl Conrec {
     pub fn new(matrix: Vec<Vec<f64>>, options: Option<ConrecOptions>) -> Self {
         let swap_axes = options.as_ref().map_or(false, |o| o.swap_axes.unwrap_or(false));
-        let xs = options.as_ref().map_or(Vec::new(), |o| o.xs.clone().unwrap_or(Vec::new()));
-        let ys = options.as_ref().map_or(Vec::new(), |o| o.ys.clone().unwrap_or(Vec::new()));
-
+        let rows = matrix.len();
+        let cols = matrix.first().map_or(0, |row| row.len());
+        
+        // Helper function to generate range similar to JS range(start, end, step)
+        fn range(start: usize, end: usize, step: usize) -> Vec<f64> {
+            (start..end).step_by(step)
+                .map(|i| i as f64)
+                .collect()
+        }
+        
+        // Handle xs and ys based on swap_axes, matching JS behavior
+        let (xs, ys) = if swap_axes {
+            // When axes are swapped, xs are in rows direction
+            (
+                options.as_ref().and_then(|o| o.xs.clone())
+                    .unwrap_or_else(|| range(0, rows, 1)),
+                options.as_ref().and_then(|o| o.ys.clone())
+                    .unwrap_or_else(|| range(0, cols, 1))
+            )
+        } else {
+            // When axes are not swapped, we swap the internal values
+            (
+                options.as_ref().and_then(|o| o.ys.clone())
+                    .unwrap_or_else(|| range(0, rows, 1)),
+                options.as_ref().and_then(|o| o.xs.clone())
+                    .unwrap_or_else(|| range(0, cols, 1))
+            )
+        };
+    
         Conrec {
-            rows: matrix.len(),
-            cols: matrix.first().map_or(0, |row| row.len()),
             matrix,
+            rows,
+            cols,
             xs,
             ys,
             swap_axes,
@@ -125,11 +158,11 @@ impl Conrec {
         match  &mut drawer {
             ContourDrawer::Basic(basic_drawer) => ContourResult::Basic {
                 contours: basic_drawer.get_contour(),
-                timeout: is_timeout,
+                timeout: is_timeout.unwrap(),
             },
             ContourDrawer::Shape(shape_drawer) => ContourResult::Shape {
                 contours: shape_drawer.get_contour(),
-                timeout: is_timeout,
+                timeout: is_timeout.unwrap(),
             },
         }
     }

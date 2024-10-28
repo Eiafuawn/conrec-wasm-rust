@@ -27,7 +27,7 @@ impl BasicContourDrawer {
         }
     }
     
-    fn draw_contour(
+    pub fn draw_contour(
         &mut self,
         x1: f64,
         x2: f64,
