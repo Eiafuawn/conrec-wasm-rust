@@ -6,12 +6,6 @@ use crate::calculate_contour::{calculate_contour, CalculateContourOptions, Conto
 
 extern crate web_sys;
 
-macro_rules! log {
-    ( $( $t:tt )* ) => {
-        web_sys::console::log_1(&format!( $( $t )* ).into());
-    }
-}
-
 #[derive(Serialize, Deserialize)]
 pub struct ConrecOptions {
     pub xs: Option<Vec<f64>>, 

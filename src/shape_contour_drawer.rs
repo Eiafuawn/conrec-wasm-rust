@@ -48,21 +48,17 @@ impl ShapeContourDrawer {
         for k in 0..a.len() {
             let mut s = a[k].s.clone();
     
-            // Traverse the sequences
             while let Some(rc_sequence) = s {
                 let sequence = rc_sequence.borrow();
                 
-                // Create a new ShapeContour
                 let mut l2 = ShapeContour {
                     level: a[k].level,
                     k,
                     lines: Vec::new(),
                 };
     
-                // Start from the head node
                 let mut current = Some(sequence.head.clone());
                 
-                // Traverse the linked list of nodes
                 while let Some(node_rc) = current {
                     let node = node_rc.borrow();
                     l2.lines.push(node.p);
@@ -72,7 +68,6 @@ impl ShapeContourDrawer {
     
                 l.push(l2);
     
-                // Move to the next sequence
                 s = sequence.next.clone();
             }
         }
