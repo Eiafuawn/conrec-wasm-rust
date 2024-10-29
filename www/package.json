@@ -11,5 +11,8 @@
   "description": "",
   "dependencies": {
     "conrec-wasm": "file:../pkg"
+  },
+  "devDependencies": {
+    "jcampconverter": "10.0.1"
   }
 }
