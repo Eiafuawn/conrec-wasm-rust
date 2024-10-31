@@ -39,7 +39,10 @@ pub fn calculate_contour(
     contour_drawer: &mut dyn ContourDrawer,
     options: Option<CalculateContourOptions>,
 ) -> Result<bool, String> {
-    // Input validation
+    // return false 
+    if z.len() == 0 {
+        return Ok(false);
+    };
 
     let options = options.unwrap_or_default();
     let ilb = options.ilb.unwrap_or(0);
