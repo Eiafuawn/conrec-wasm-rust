@@ -7,7 +7,7 @@ pub mod conrec;
 
 use wasm_bindgen::prelude::*;
 use serde_wasm_bindgen::{from_value, to_value};
-use js_sys::{Array};
+use js_sys::Array;
 
 use utils::set_panic_hook;
 use crate::conrec::Conrec;

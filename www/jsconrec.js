@@ -12,7 +12,6 @@ const __dirname = dirname(__filename);
 const data = readFileSync(`${__dirname}/zhmbc_0.jdx`, "utf8");
 const parsed = convert(data, { noContour: true }).flatten[0];
 const matrix = parsed.minMax?.z || [];
-const results = {};
 
 const conrec = new Conrec(matrix, {});
 
@@ -24,7 +23,6 @@ try {
       levels: [-1000000000, 1000000000],
       timeout: 10000,
     });
-    results.test1 = result.contours;
     console.timeEnd("Test 1");
 
     console.time("Test 2");
@@ -33,7 +31,6 @@ try {
       levels: [-100000, 100000],
       timeout: 10000,
     });
-    results.test2 = result2.contours;
     console.timeEnd("Test 2");
 
     console.time("Test 3");
@@ -42,7 +39,6 @@ try {
       levels: [],
       timeout: 10000,
     });
-    results.test3 = result3.contours;
     console.timeEnd("Test 3");
 
     console.time("Test 4");
@@ -51,7 +47,6 @@ try {
       levels: [10],
       timeout: 10000,
     });
-    results.test4 = result4.contours;
     console.timeEnd("Test 4");
 
     console.time("Test 5");
@@ -61,7 +56,6 @@ try {
       levels: [10],
       timeout: 10000,
     });
-    results.test5 = result5.contours;
     console.timeEnd("Test 5");
 
     console.time("Test 6");
@@ -70,13 +64,7 @@ try {
       levels: [10],
       timeout: 10,
     });
-    results.test6 = result6.contours;
     console.timeEnd("Test 6");
-
-    writeFileSync(
-      `${__dirname}/contours.json`,
-      JSON.stringify(results, null, 2)
-    );
   } catch (err) {
     console.error("Error", err);
   }

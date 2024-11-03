@@ -13,7 +13,7 @@ wasm.initSync(readFileSync(`${__dirname}/../pkg/conrec_wasm_bg.wasm`));
 const data = readFileSync(`${__dirname}/zhmbc_0.jdx`, "utf8");
 const parsed = convert(data, { noContour: true }).flatten[0];
 const matrix = parsed.minMax?.z || [];
-const results = {};
+writeFileSync(`${__dirname}/matrix.json`, JSON.stringify(matrix, null, 2));
 
 const conrec = new wasm.ConrecWasm(matrix, {});
 
@@ -25,7 +25,6 @@ try {
       levels: [-1000000000, 1000000000],
       timeout: 10000,
     });
-    results.test1 = result.Basic.contours;
     console.timeEnd("Test 1");
 
     console.time("Test 2");
@@ -34,7 +33,6 @@ try {
       levels: [-100000, 100000],
       timeout: 10000,
     });
-    results.test2 = result2.Basic.contours;
     console.timeEnd("Test 2");
 
     console.time("Test 3");
@@ -43,7 +41,6 @@ try {
       levels: [],
       timeout: 10000,
     });
-    results.test3 = result3.Basic.contours;
     console.timeEnd("Test 3");
 
     console.time("Test 4");
@@ -52,7 +49,6 @@ try {
       levels: [10],
       timeout: 10000,
     });
-    results.test4 = result4.Basic.contours;
     console.timeEnd("Test 4");
 
     console.time("Test 5");
@@ -62,7 +58,6 @@ try {
       levels: [10],
       timeout: 10000,
     });
-    results.test5 = result5.Basic.contours;
     console.timeEnd("Test 5");
 
     console.time("Test 6");
@@ -71,13 +66,7 @@ try {
       levels: [10],
       timeout: 10,
     });
-    results.test6 = result6.Basic.contours;
     console.timeEnd("Test 6");
-
-    writeFileSync(
-      `${__dirname}/contours.json`,
-      JSON.stringify(results, null, 2)
-    );
   } catch (err) {
     console.error("Error", err);
   }
