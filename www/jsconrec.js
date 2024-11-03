@@ -1,77 +1,76 @@
-import { convert } from "jcampconverter";
-import * as wasm from "conrec-wasm";
+import { readFileSync, writeFileSync } from "fs";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import { readFileSync, write, writeFileSync } from "fs";
+
+import { convert } from "jcampconverter";
+
+import { Conrec } from "ml-conrec";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-// Read WASM file
-wasm.initSync(readFileSync(`${__dirname}/../pkg/conrec_wasm_bg.wasm`));
 
 const data = readFileSync(`${__dirname}/zhmbc_0.jdx`, "utf8");
 const parsed = convert(data, { noContour: true }).flatten[0];
 const matrix = parsed.minMax?.z || [];
 const results = {};
 
-const conrec = new wasm.ConrecWasm(matrix, {});
+const conrec = new Conrec(matrix, {});
 
 try {
   try {
     console.time("Test 1");
-    const result = conrec.draw_contour({
-      contour_drawer: "Basic",
+    const result = conrec.drawContour({
+      contourDrawer: "basic",
       levels: [-1000000000, 1000000000],
       timeout: 10000,
     });
-    results.test1 = result.Basic.contours;
+    results.test1 = result.contours;
     console.timeEnd("Test 1");
 
     console.time("Test 2");
-    const result2 = conrec.draw_contour({
-      contour_drawer: "Basic",
+    const result2 = conrec.drawContour({
+      contourDrawer: "basic",
       levels: [-100000, 100000],
       timeout: 10000,
     });
-    results.test2 = result2.Basic.contours;
+    results.test2 = result2.contours;
     console.timeEnd("Test 2");
 
     console.time("Test 3");
-    const result3 = conrec.draw_contour({
-      contour_drawer: "Basic",
+    const result3 = conrec.drawContour({
+      contourDrawer: "basic",
       levels: [],
       timeout: 10000,
     });
-    results.test3 = result3.Basic.contours;
+    results.test3 = result3.contours;
     console.timeEnd("Test 3");
 
     console.time("Test 4");
-    const result4 = conrec.draw_contour({
-      contour_drawer: "Basic",
+    const result4 = conrec.drawContour({
+      contourDrawer: "basic",
       levels: [10],
       timeout: 10000,
     });
-    results.test4 = result4.Basic.contours;
+    results.test4 = result4.contours;
     console.timeEnd("Test 4");
 
     console.time("Test 5");
-    let matrixSwap = new wasm.ConrecWasm(matrix, { swap_axes: true });
-    const result5 = matrixSwap.draw_contour({
-      contour_drawer: "Basic",
+    let matrixSwap = new Conrec(matrix, { swapAxes: true });
+    const result5 = matrixSwap.drawContour({
+      contourDrawer: "basic",
       levels: [10],
       timeout: 10000,
     });
-    results.test5 = result5.Basic.contours;
+    results.test5 = result5.contours;
     console.timeEnd("Test 5");
 
     console.time("Test 6");
-    const result6 = conrec.draw_contour({
-      contour_drawer: "Basic",
+    const result6 = conrec.drawContour({
+      contourDrawer: "basic",
       levels: [10],
       timeout: 10,
     });
-    results.test6 = result6.Basic.contours;
+    results.test6 = result6.contours;
     console.timeEnd("Test 6");
 
     writeFileSync(
@@ -86,13 +85,6 @@ try {
   console.log("\nDebug info:");
   console.log(
     "ConrecWasm methods:",
-    Object.getOwnPropertyNames(wasm.ConrecWasm.prototype)
+    Object.getOwnPropertyNames(Conrec.prototype)
   );
-  console.log("Available exports:", Object.keys(wasm));
-}
-
-try {
-  conrec.free();
-} catch (e) {
-  console.log("Cleanup error:", e);
 }

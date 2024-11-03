@@ -10,7 +10,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "conrec-wasm": "file:../pkg"
+    "conrec-wasm": "file:../pkg",
+    "ml-conrec": "^5.0.3"
   },
   "devDependencies": {
     "jcampconverter": "10.0.1"
