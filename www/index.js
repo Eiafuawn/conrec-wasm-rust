@@ -20,52 +20,64 @@ const conrec = new wasm.ConrecWasm(matrix, {});
 try {
   try {
     console.time("Test 1");
-    const result = conrec.draw_contour({
-      contour_drawer: "Basic",
-      levels: [-1000000000, 1000000000],
-      timeout: 10000,
-    });
+    for (let i = 0; i < 100; i++) {
+      const result = conrec.draw_contour({
+        contour_drawer: "Basic",
+        levels: [-1000000000, 1000000000],
+        timeout: 10000,
+      });
+    }
     console.timeEnd("Test 1");
 
     console.time("Test 2");
-    const result2 = conrec.draw_contour({
-      contour_drawer: "Basic",
-      levels: [-100000, 100000],
-      timeout: 10000,
-    });
+    for (let i = 0; i < 100; i++) {
+      const result2 = conrec.draw_contour({
+        contour_drawer: "Basic",
+        levels: [-100000, 100000],
+        timeout: 10000,
+      });
+    }
     console.timeEnd("Test 2");
 
     console.time("Test 3");
-    const result3 = conrec.draw_contour({
-      contour_drawer: "Basic",
-      levels: [],
-      timeout: 10000,
-    });
+    for (let i = 0; i < 500; i++) {
+      const result3 = conrec.draw_contour({
+        contour_drawer: "Basic",
+        levels: [],
+        timeout: 10000,
+      });
+    }
     console.timeEnd("Test 3");
 
     console.time("Test 4");
-    const result4 = conrec.draw_contour({
-      contour_drawer: "Basic",
-      levels: [10],
-      timeout: 10000,
-    });
+    for (let i = 0; i < 20; i++) {
+      const result4 = conrec.draw_contour({
+        contour_drawer: "Basic",
+        levels: [10],
+        timeout: 10000,
+      });
+    }
     console.timeEnd("Test 4");
 
-    console.time("Test 5");
     let matrixSwap = new wasm.ConrecWasm(matrix, { swap_axes: true });
-    const result5 = matrixSwap.draw_contour({
-      contour_drawer: "Basic",
-      levels: [10],
-      timeout: 10000,
-    });
+    console.time("Test 5");
+    for (let i = 0; i < 20; i++) {
+      const result5 = matrixSwap.draw_contour({
+        contour_drawer: "Basic",
+        levels: [10],
+        timeout: 10000,
+      });
+    }
     console.timeEnd("Test 5");
 
     console.time("Test 6");
-    const result6 = conrec.draw_contour({
-      contour_drawer: "Basic",
-      levels: [10],
-      timeout: 10,
-    });
+    for (let i = 0; i < 20; i++) {
+      const result6 = conrec.draw_contour({
+        contour_drawer: "Basic",
+        levels: [10],
+        timeout: 10,
+      });
+    }
     console.timeEnd("Test 6");
   } catch (err) {
     console.error("Error", err);
