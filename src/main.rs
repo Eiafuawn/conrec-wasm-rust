@@ -87,5 +87,5 @@ pub fn main() {
             timeout: Some(10),
         });
     }
-    print!("Test 6: {:?}", timer6.elapsed());
+    println!("Test 6: {:?}", timer6.elapsed());
 }
