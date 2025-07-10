@@ -1,11 +1,5 @@
 extern crate web_sys;
 
-macro_rules! log {
-    ( $( $t:tt )* ) => {
-        web_sys::console::log_1(&format!( $( $t )* ).into());
-    }
-}
-
 const EPSILON: f64 = 1e-10;
 const MINUS_EPSILON: f64 = -1e-10;
 
@@ -39,7 +33,7 @@ pub fn calculate_contour(
     contour_drawer: &mut dyn ContourDrawer,
     options: Option<CalculateContourOptions>,
 ) -> Result<bool, String> {
-    // return false 
+    // return false
     if z.len() == 0 {
         return Ok(false);
     };
@@ -61,8 +55,8 @@ pub fn calculate_contour(
     let znc1 = z[nc - 1];
 
     // The indexing arrays
-    let im: [usize; 4] = [0, 1, 1, 0];
-    let jm: [usize; 4] = [0, 0, 1, 1];
+    let _im: [usize; 4] = [0, 1, 1, 0];
+    let _jm: [usize; 4] = [0, 0, 1, 1];
 
     // 3D lookup table for case values
     let castab: [[[i32; 3]; 3]; 3] = [
@@ -83,11 +77,7 @@ pub fn calculate_contour(
             let di1j = matrix[i + 1][j];
             let di1j1 = matrix[i + 1][j + 1];
 
-            let (min1, max1) = if dij > dij1 {
-                (dij1, dij)
-            } else {
-                (dij, dij1)
-            };
+            let (min1, max1) = if dij > dij1 { (dij1, dij) } else { (dij, dij1) };
 
             let (min2, max2) = if di1j > di1j1 {
                 (di1j1, di1j)
@@ -140,19 +130,50 @@ pub fn calculate_contour(
                             let m2 = 0;
                             let m3 = if m != 4 { m + 1 } else { 1 };
 
-                            let case_value = castab[(sh[m1] + 1) as usize][(sh[m2] + 1) as usize][(sh[m3] + 1) as usize];
+                            let case_value = castab[(sh[m1] + 1) as usize][(sh[m2] + 1) as usize]
+                                [(sh[m3] + 1) as usize];
 
                             if case_value != 0 {
                                 let (x1, y1, x2, y2) = match case_value {
                                     1 => (xh[m1], yh[m1], xh[m2], yh[m2]),
                                     2 => (xh[m2], yh[m2], xh[m3], yh[m3]),
                                     3 => (xh[m3], yh[m3], xh[m1], yh[m1]),
-                                    4 => (xh[m1], yh[m1], xsect(&h, &xh, m2, m3), ysect(&h, &yh, m2, m3)),
-                                    5 => (xh[m2], yh[m2], xsect(&h, &xh, m3, m1), ysect(&h, &yh, m3, m1)),
-                                    6 => (xh[m3], yh[m3], xsect(&h, &xh, m1, m2), ysect(&h, &yh, m1, m2)),
-                                    7 => (xsect(&h, &xh, m1, m2), ysect(&h, &yh, m1, m2), xsect(&h, &xh, m2, m3), ysect(&h, &yh, m2, m3)),
-                                    8 => (xsect(&h, &xh, m2, m3), ysect(&h, &yh, m2, m3), xsect(&h, &xh, m3, m1), ysect(&h, &yh, m3, m1)),
-                                    9 => (xsect(&h, &xh, m3, m1), ysect(&h, &yh, m3, m1), xsect(&h, &xh, m1, m2), ysect(&h, &yh, m1, m2)),
+                                    4 => (
+                                        xh[m1],
+                                        yh[m1],
+                                        xsect(&h, &xh, m2, m3),
+                                        ysect(&h, &yh, m2, m3),
+                                    ),
+                                    5 => (
+                                        xh[m2],
+                                        yh[m2],
+                                        xsect(&h, &xh, m3, m1),
+                                        ysect(&h, &yh, m3, m1),
+                                    ),
+                                    6 => (
+                                        xh[m3],
+                                        yh[m3],
+                                        xsect(&h, &xh, m1, m2),
+                                        ysect(&h, &yh, m1, m2),
+                                    ),
+                                    7 => (
+                                        xsect(&h, &xh, m1, m2),
+                                        ysect(&h, &yh, m1, m2),
+                                        xsect(&h, &xh, m2, m3),
+                                        ysect(&h, &yh, m2, m3),
+                                    ),
+                                    8 => (
+                                        xsect(&h, &xh, m2, m3),
+                                        ysect(&h, &yh, m2, m3),
+                                        xsect(&h, &xh, m3, m1),
+                                        ysect(&h, &yh, m3, m1),
+                                    ),
+                                    9 => (
+                                        xsect(&h, &xh, m3, m1),
+                                        ysect(&h, &yh, m3, m1),
+                                        xsect(&h, &xh, m1, m2),
+                                        ysect(&h, &yh, m1, m2),
+                                    ),
                                     _ => continue,
                                 };
 

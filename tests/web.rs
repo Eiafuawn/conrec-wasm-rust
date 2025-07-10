@@ -1,5 +1,3 @@
-//! Test suite for the Web and headless browsers.
-
 #![cfg(target_arch = "wasm32")]
 
 extern crate wasm_bindgen_test;
@@ -9,41 +7,6 @@ use std::{array, println, vec};
 extern crate web_sys;
 use wasm_bindgen::JsValue;
 use web_sys::console;
-
-macro_rules! log {
-    ( $( $t:tt )* ) => {
-        console::log_1(&format!( $( $t )* ).into());
-    }
-}
-
-pub struct Timer<'a> {
-    name: &'a str,
-    is_stopped: bool,
-}
-
-impl<'a> Timer<'a> {
-    pub fn new(name: &'a str) -> Timer<'a> {
-        console::time_with_label(name);
-        Timer { name, is_stopped: false }
-    }
-
-    pub fn stop(&mut self) {
-        if !self.is_stopped {
-            console::time_end_with_label(self.name);
-            self.is_stopped = true;
-        }
-    }
-}
-
-impl<'a> Drop for Timer<'a> {
-    fn drop(&mut self) {
-        if !self.is_stopped {
-            // Automatically stop the timer if it hasn't been stopped yet
-            console::time_end_with_label(self.name);
-        }
-    }
-}
-
 
 use js_sys::Array;
 use serde_wasm_bindgen::{from_value, to_value};
@@ -57,6 +20,8 @@ use conrec_wasm::{ conrec::{Conrec, ConrecOptions, ContourDrawer, ContourDrawerN
 #[wasm_bindgen_test]
 fn conrec() {
     set_panic_hook();
+    
+    /* 
     let matrix: Vec<Vec<f64>> = serde_json::from_str(std::include_str!("../www/matrix.json")).unwrap();
     let mut conrec: Conrec = Conrec::new(matrix.clone(), None);
     
@@ -132,7 +97,7 @@ fn conrec() {
     });
 }
     timer.stop();
-}
+} */
 
 /* #[wasm_bindgen_test]
 fn conrecWasm() {
@@ -193,3 +158,37 @@ fn conrecWasm() {
     });
    
 } */
+macro_rules! log {
+    ( $( $t:tt )* ) => {
+        console::log_1(&format!( $( $t )* ).into());
+    }
+}
+
+pub struct Timer<'a> {
+    name: &'a str,
+    is_stopped: bool,
+}
+
+impl<'a> Timer<'a> {
+    pub fn new(name: &'a str) -> Timer<'a> {
+        console::time_with_label(name);
+        Timer { name, is_stopped: false }
+    }
+
+    pub fn stop(&mut self) {
+        if !self.is_stopped {
+            console::time_end_with_label(self.name);
+            self.is_stopped = true;
+        }
+    }
+}
+
+impl<'a> Drop for Timer<'a> {
+    fn drop(&mut self) {
+        if !self.is_stopped {
+            // Automatically stop the timer if it hasn't been stopped yet
+            console::time_end_with_label(self.name);
+        }
+    }
+}
+
