@@ -1,16 +1,18 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
-use crate::basic_contour_drawer::{BasicContourDrawer, BasicContour};
-use crate::shape_contour_drawer::{ShapeContourDrawer, ShapeContour};
-use crate::calculate_contour::{calculate_contour, CalculateContourOptions, ContourDrawer as CalcContourDrawer};
+use crate::basic_contour_drawer::{BasicContour, BasicContourDrawer};
+use crate::calculate_contour::{
+    calculate_contour, CalculateContourOptions, ContourDrawer as CalcContourDrawer,
+};
+use crate::shape_contour_drawer::{ShapeContour, ShapeContourDrawer};
 
 extern crate web_sys;
 
 #[derive(Serialize, Deserialize)]
 pub struct ConrecOptions {
-    pub xs: Option<Vec<f64>>, 
-    pub ys: Option<Vec<f64>>,    
-    pub swap_axes: Option<bool>,    
+    pub xs: Option<Vec<f64>>,
+    pub ys: Option<Vec<f64>>,
+    pub swap_axes: Option<bool>,
 }
 
 impl Default for ConrecOptions {
@@ -43,7 +45,7 @@ pub enum ContourDrawerName {
     Shape,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub enum ContourResult {
     Basic {
         contours: Vec<BasicContour>,
@@ -77,36 +79,44 @@ pub struct Conrec {
 
 impl Conrec {
     pub fn new(matrix: Vec<Vec<f64>>, options: Option<ConrecOptions>) -> Self {
-        let swap_axes = options.as_ref().map_or(false, |o| o.swap_axes.unwrap_or(false));
+        let swap_axes = options
+            .as_ref()
+            .map_or(false, |o| o.swap_axes.unwrap_or(false));
         let rows = matrix.len();
         let cols = matrix.first().map_or(0, |row| row.len());
-        
+
         // Helper function to generate range similar to JS range(start, end, step)
         fn range(start: usize, end: usize, step: usize) -> Vec<f64> {
-            (start..end).step_by(step)
-                .map(|i| i as f64)
-                .collect()
+            (start..end).step_by(step).map(|i| i as f64).collect()
         }
-        
+
         // Handle xs and ys based on swap_axes, matching JS behavior
         let (xs, ys) = if swap_axes {
             // When axes are swapped, xs are in rows direction
             (
-                options.as_ref().and_then(|o| o.xs.clone())
+                options
+                    .as_ref()
+                    .and_then(|o| o.xs.clone())
                     .unwrap_or_else(|| range(0, rows, 1)),
-                options.as_ref().and_then(|o| o.ys.clone())
-                    .unwrap_or_else(|| range(0, cols, 1))
+                options
+                    .as_ref()
+                    .and_then(|o| o.ys.clone())
+                    .unwrap_or_else(|| range(0, cols, 1)),
             )
         } else {
             // When axes are not swapped, we swap the internal values
             (
-                options.as_ref().and_then(|o| o.ys.clone())
+                options
+                    .as_ref()
+                    .and_then(|o| o.ys.clone())
                     .unwrap_or_else(|| range(0, rows, 1)),
-                options.as_ref().and_then(|o| o.xs.clone())
-                    .unwrap_or_else(|| range(0, cols, 1))
+                options
+                    .as_ref()
+                    .and_then(|o| o.xs.clone())
+                    .unwrap_or_else(|| range(0, cols, 1)),
             )
         };
-    
+
         Conrec {
             matrix,
             rows,
@@ -133,10 +143,14 @@ impl Conrec {
             l.sort_by(|a, b| a.partial_cmp(b).unwrap());
             l
         };
-        
+
         let mut drawer = match contour_drawer {
-            ContourDrawerName::Basic => ContourDrawer::Basic(BasicContourDrawer::new(levels.clone(), self.swap_axes)),
-            ContourDrawerName::Shape => ContourDrawer::Shape(ShapeContourDrawer::new(levels.clone(), self.swap_axes)),
+            ContourDrawerName::Basic => {
+                ContourDrawer::Basic(BasicContourDrawer::new(levels.clone(), self.swap_axes))
+            }
+            ContourDrawerName::Shape => {
+                ContourDrawer::Shape(ShapeContourDrawer::new(levels.clone(), self.swap_axes))
+            }
         };
 
         let calculate_options = CalculateContourOptions {
@@ -147,9 +161,16 @@ impl Conrec {
             iub: None,
         };
 
-        let is_timeout = calculate_contour(&self.matrix, &self.xs, &self.ys, &levels, &mut drawer, Some(calculate_options));
+        let is_timeout = calculate_contour(
+            &self.matrix,
+            &self.xs,
+            &self.ys,
+            &levels,
+            &mut drawer,
+            Some(calculate_options),
+        );
 
-        match  &mut drawer {
+        match &mut drawer {
             ContourDrawer::Basic(basic_drawer) => ContourResult::Basic {
                 contours: basic_drawer.get_contour(),
                 timeout: is_timeout.unwrap(),
@@ -160,7 +181,7 @@ impl Conrec {
             },
         }
     }
-    
+
     fn _compute_min_max(&mut self) {
         if !self.has_min_max {
             let (min, max) = min_max(&self.matrix);
@@ -168,7 +189,7 @@ impl Conrec {
             self.max = max;
             self.has_min_max = true;
         }
-    } 
+    }
 }
 
 fn range(from: f64, to: f64, step: f64) -> Vec<f64> {

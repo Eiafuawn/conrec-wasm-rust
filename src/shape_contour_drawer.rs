@@ -1,11 +1,11 @@
 use crate::contour_builder::{ContourBuilder, Point};
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct ShapeContour {
     pub level: f64,
     k: usize,
-    lines: Vec<Point>,
+    pub lines: Vec<Point>,
 }
 
 pub struct ShapeContourDrawer {

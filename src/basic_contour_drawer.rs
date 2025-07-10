@@ -1,9 +1,9 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BasicContour {
     z_value: f64,
-    lines: Vec<f64>,
+    pub lines: Vec<f64>,
 }
 
 #[derive(Clone)]
@@ -26,23 +26,15 @@ impl BasicContourDrawer {
             swap_axes,
         }
     }
-    
-    pub fn draw_contour(
-        &mut self,
-        x1: f64,
-        x2: f64,
-        y1: f64,
-        y2: f64,
-        _z: f64,
-        k: usize,
-    ) {
+
+    pub fn draw_contour(&mut self, x1: f64, x2: f64, y1: f64, y2: f64, _z: f64, k: usize) {
         if !self.swap_axes {
             self.contour[k].lines.extend(vec![y1, x1, y2, x2]);
         } else {
             self.contour[k].lines.extend(vec![x1, y1, x2, y2]);
         }
     }
-    
+
     pub fn get_contour(&self) -> Vec<BasicContour> {
         self.contour.clone()
     }
