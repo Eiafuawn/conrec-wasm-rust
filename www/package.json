@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@web/dev-server": "^0.4.6",
-    "jcampconverter": "10.0.1",
+    "jcampconverter": "11.0.3",
     "mitata": "^1.0.34"
   }
 }
