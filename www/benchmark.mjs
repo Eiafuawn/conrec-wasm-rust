@@ -3,11 +3,8 @@ import { run, bench, boxplot, do_not_optimize, group } from "mitata";
 import * as wasm from "conrec-wasm";
 import { Conrec } from "ml-conrec";
 import { readFileSync } from "fs";
-// const readFileSync = require("fs").readFileSync;
 import { fileURLToPath } from "url";
-// const fileURLToPath = require("url").fileURLToPath;
 import { dirname } from "path";
-// const dirname = require("path").dirname;
 import { convert } from "jcampconverter";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -110,14 +107,6 @@ function JSconrec() {
       timeout: 10000,
     });
   }
-
-  for (let i = 0; i < 20; i++) {
-    const result6 = conrec.drawContour({
-      contourDrawer: "basic",
-      levels: [10],
-      timeout: 10,
-    });
-  }
 }
 
 group("Conrec tests", () => {
@@ -126,9 +115,6 @@ group("Conrec tests", () => {
   }).gc("inner");
   bench("Wasmconrec", () => {
     do_not_optimize(wasm.process_file());
-  }).gc("inner");
-  bench("WasmOverheadConrec", () => {
-    do_not_optimize(WasmOverheadConrec());
   }).gc("inner");
 });
 

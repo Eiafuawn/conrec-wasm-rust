@@ -22,9 +22,6 @@ for (let i = 0; i < 100; i++) {
     levels: [-1000000000, 1000000000],
     timeout: 10000,
   });
-  if (i === 99) {
-    console.log("Result:", result.contours[0].lines.length);
-  }
 }
 console.timeEnd("Test 1");
 
@@ -35,9 +32,6 @@ for (let i = 0; i < 100; i++) {
     levels: [-100000, 100000],
     timeout: 10000,
   });
-  if (i === 99) {
-    console.log("Result 2:", result2.contours[0].lines.length);
-  }
 }
 console.timeEnd("Test 2");
 
@@ -48,9 +42,6 @@ for (let i = 0; i < 500; i++) {
     levels: [],
     timeout: 10000,
   });
-  if (i === 499) {
-    console.log("Result 3: no contours:", result3.contours.length);
-  }
 }
 console.timeEnd("Test 3");
 
@@ -61,9 +52,6 @@ for (let i = 0; i < 20; i++) {
     levels: [10],
     timeout: 10000,
   });
-  if (i === 19) {
-    console.log("Result 4:", result4.contours[0].lines.length);
-  }
 }
 console.timeEnd("Test 4");
 
@@ -75,21 +63,5 @@ for (let i = 0; i < 20; i++) {
     levels: [10],
     timeout: 10000,
   });
-  if (i === 19) {
-    console.log("Result 5:", result5.contours[0].lines.length);
-  }
 }
 console.timeEnd("Test 5");
-
-console.time("Test 6");
-for (let i = 0; i < 20; i++) {
-  const result6 = conrec.drawContour({
-    contourDrawer: "basic",
-    levels: [10],
-    timeout: 10,
-  });
-  if (i === 19) {
-    console.log("Result 6:", result6.contours[0].lines.length);
-  }
-}
-console.timeEnd("Test 6");

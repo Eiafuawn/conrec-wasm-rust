@@ -54,6 +54,7 @@ pub fn process_file() {
         .expect("Failed to parse matrix.json");
 
     let mut conrec = Conrec::new(matrix.clone(), None);
+    web_sys::console::time_with_label("Wasm Test 1");
     for _ in 0..100 {
         let _result1: ContourResult = conrec.draw_contour(DrawContourOptions {
             contour_drawer: Some(ContourDrawerName::Basic),
@@ -62,7 +63,9 @@ pub fn process_file() {
             timeout: Some(10000),
         });
     }
+    web_sys::console::time_end_with_label("Wasm Test 1");
 
+    web_sys::console::time_with_label("Wasm Test 2");
     for _ in 0..100 {
         let _result2: ContourResult = conrec.draw_contour(DrawContourOptions {
             contour_drawer: Some(ContourDrawerName::Basic),
@@ -71,7 +74,9 @@ pub fn process_file() {
             timeout: Some(10000),
         });
     }
+    web_sys::console::time_end_with_label("Wasm Test 2");
 
+    web_sys::console::time_with_label("Wasm Test 3");
     for _ in 0..500 {
         let _result3: ContourResult = conrec.draw_contour(DrawContourOptions {
             contour_drawer: Some(ContourDrawerName::Basic),
@@ -80,7 +85,9 @@ pub fn process_file() {
             timeout: Some(10000),
         });
     }
+    web_sys::console::time_end_with_label("Wasm Test 3");
 
+    web_sys::console::time_with_label("Wasm Test 4");
     for _ in 0..20 {
         let _result4: ContourResult = conrec.draw_contour(DrawContourOptions {
             contour_drawer: Some(ContourDrawerName::Basic),
@@ -89,6 +96,7 @@ pub fn process_file() {
             timeout: Some(10000),
         });
     }
+    web_sys::console::time_end_with_label("Wasm Test 4");
 
     let mut conrec_swap: Conrec = Conrec::new(
         matrix.clone(),
@@ -98,6 +106,7 @@ pub fn process_file() {
             ys: None,
         }),
     );
+    web_sys::console::time_with_label("Wasm Test 5");
     for _ in 0..20 {
         let _result5: ContourResult = conrec_swap.draw_contour(DrawContourOptions {
             contour_drawer: Some(ContourDrawerName::Basic),
@@ -106,13 +115,5 @@ pub fn process_file() {
             timeout: Some(10000),
         });
     }
-
-    for _ in 0..20 {
-        let _result6: ContourResult = conrec.draw_contour(DrawContourOptions {
-            contour_drawer: Some(ContourDrawerName::Basic),
-            levels: Some(vec![10.0]),
-            nb_levels: Some(10),
-            timeout: Some(10),
-        });
-    }
+    web_sys::console::time_end_with_label("Wasm Test 5");
 }
