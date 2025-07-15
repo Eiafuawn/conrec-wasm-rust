@@ -1,7 +1,7 @@
+use serde::{Deserialize, Serialize};
+use std::cell::RefCell;
 use std::f64::EPSILON;
 use std::rc::Rc;
-use std::cell::RefCell;
-use serde::{Serialize, Deserialize};
 
 #[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Point {
@@ -86,9 +86,16 @@ impl ContourBuilder {
 
         match (ma, mb) {
             (None, None) => {
-                // Both unmatched, add as new sequence
-                let bb = Rc::new(RefCell::new(SequenceNode { p: b, next: None, prev: None }));
-                let aa = Rc::new(RefCell::new(SequenceNode { p: a, next: Some(bb.clone()), prev: None }));
+                let bb = Rc::new(RefCell::new(SequenceNode {
+                    p: b,
+                    next: None,
+                    prev: None,
+                }));
+                let aa = Rc::new(RefCell::new(SequenceNode {
+                    p: a,
+                    next: Some(bb.clone()),
+                    prev: None,
+                }));
                 bb.borrow_mut().prev = Some(aa.clone());
 
                 let new_seq = Rc::new(RefCell::new(Sequence {
@@ -106,8 +113,11 @@ impl ContourBuilder {
                 self.count += 1;
             }
             (Some(ma), None) => {
-                // a matched, b did not - thus b extends sequence ma
-                let pp = Rc::new(RefCell::new(SequenceNode { p: b, next: None, prev: None }));
+                let pp = Rc::new(RefCell::new(SequenceNode {
+                    p: b,
+                    next: None,
+                    prev: None,
+                }));
                 let mut ma = ma.borrow_mut();
                 if prepend_a {
                     pp.borrow_mut().next = Some(ma.head.clone());
@@ -120,8 +130,11 @@ impl ContourBuilder {
                 }
             }
             (None, Some(mb)) => {
-                // b matched, a did not - thus a extends sequence mb
-                let pp = Rc::new(RefCell::new(SequenceNode { p: a, next: None, prev: None }));
+                let pp = Rc::new(RefCell::new(SequenceNode {
+                    p: a,
+                    next: None,
+                    prev: None,
+                }));
                 let mut mb = mb.borrow_mut();
                 if prepend_b {
                     pp.borrow_mut().next = Some(mb.head.clone());
@@ -134,9 +147,7 @@ impl ContourBuilder {
                 }
             }
             (Some(ma), Some(mb)) => {
-                // Both matched, can merge sequences
                 if Rc::ptr_eq(&ma, &mb) {
-                    // Closing the path
                     let mut ma = ma.borrow_mut();
                     let pp = Rc::new(RefCell::new(SequenceNode {
                         p: ma.tail.borrow().p,
@@ -149,11 +160,9 @@ impl ContourBuilder {
                 } else {
                     match (prepend_a as u8) | ((prepend_b as u8) << 1) {
                         0 => {
-                            // tail-tail
                             reverse_list(ma.clone());
                         }
                         1 => {
-                            // head-tail
                             let ma_clone = ma.clone();
                             let ma = ma.borrow_mut();
                             let mut mb = mb.borrow_mut();
@@ -165,11 +174,9 @@ impl ContourBuilder {
                             self.remove_seq(ma_clone);
                         }
                         3 => {
-                            // head-head
                             reverse_list(ma.clone());
                         }
                         2 => {
-                            // tail-head
                             let mb_clone = mb.clone();
                             let mut ma = ma.borrow_mut();
                             let mb = mb.borrow_mut();

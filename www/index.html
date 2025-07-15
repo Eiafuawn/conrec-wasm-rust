@@ -1,0 +1,14 @@
+<body>
+  <h1>Conrec Wasm Test</h1>
+  <pre id="output"></pre>
+  <script type="module">
+    import { runBenchmark } from "./benchmark.mjs";
+    console.log("Starting benchmark...");
+    runBenchmark({
+      silent: false,
+      onOutput: (text) => {
+        document.getElementById("output").textContent += text + "\n";
+      },
+    });
+  </script>
+</body>

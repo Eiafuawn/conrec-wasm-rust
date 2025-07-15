@@ -16,7 +16,6 @@ pub struct CalculateContourOptions {
     pub jub: Option<usize>,
 }
 
-// Helper functions moved outside to avoid borrowing issues
 fn xsect(h: &[f64], xh: &[f64], p1: usize, p2: usize) -> f64 {
     (h[p2] * xh[p1] - h[p1] * xh[p2]) / (h[p2] - h[p1])
 }
@@ -44,7 +43,6 @@ pub fn calculate_contour(
     let jlb = options.jlb.unwrap_or(0);
     let jub = options.jub.unwrap_or(matrix[0].len() - 1);
 
-    // Pre-allocate vectors to avoid reallocation
     let mut h = vec![0.0; 5];
     let mut sh = vec![0i8; 5];
     let mut xh = vec![0.0; 5];
@@ -97,7 +95,6 @@ pub fn calculate_contour(
                         h[3] = matrix[i + 1][j + 1] - z[k];
                         h[4] = matrix[i][j + 1] - z[k];
 
-                        // Fill corner coordinates
                         xh[1] = x[i];
                         xh[2] = x[i + 1];
                         xh[3] = x[i + 1];
@@ -108,12 +105,10 @@ pub fn calculate_contour(
                         yh[3] = y[j + 1];
                         yh[4] = y[j + 1];
 
-                        // Calculate center point
                         h[0] = 0.25 * (h[1] + h[2] + h[3] + h[4]);
                         xh[0] = 0.5 * (x[i] + x[i + 1]);
                         yh[0] = 0.5 * (y[j] + y[j + 1]);
 
-                        // Calculate signs
                         for m in 0..=4 {
                             sh[m] = if h[m] > EPSILON {
                                 1
@@ -124,7 +119,6 @@ pub fn calculate_contour(
                             };
                         }
 
-                        // Process each triangle
                         for m in 1..=4 {
                             let m1 = m;
                             let m2 = 0;

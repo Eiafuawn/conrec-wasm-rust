@@ -85,14 +85,11 @@ impl Conrec {
         let rows = matrix.len();
         let cols = matrix.first().map_or(0, |row| row.len());
 
-        // Helper function to generate range similar to JS range(start, end, step)
         fn range(start: usize, end: usize, step: usize) -> Vec<f64> {
             (start..end).step_by(step).map(|i| i as f64).collect()
         }
 
-        // Handle xs and ys based on swap_axes, matching JS behavior
         let (xs, ys) = if swap_axes {
-            // When axes are swapped, xs are in rows direction
             (
                 options
                     .as_ref()
@@ -104,7 +101,6 @@ impl Conrec {
                     .unwrap_or_else(|| range(0, cols, 1)),
             )
         } else {
-            // When axes are not swapped, we swap the internal values
             (
                 options
                     .as_ref()

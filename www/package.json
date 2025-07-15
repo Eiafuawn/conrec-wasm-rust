@@ -14,6 +14,8 @@
     "ml-conrec": "^5.0.3"
   },
   "devDependencies": {
-    "jcampconverter": "10.0.1"
+    "@web/dev-server": "^0.4.6",
+    "jcampconverter": "10.0.1",
+    "mitata": "^1.0.34"
   }
 }
